@@ -21,12 +21,21 @@ namespace WebApplication8.DAL
             using (IDbConnection conn = connection)
             {
                 var queryString = "SELECT * FROM Book;";
-                conn.Open();
+                //conn.Open();
                 books = await conn.QueryAsync<Book>(queryString);
                
             }
              return books;
         }
-
+        
+        public async Task CreateAsync(Book book)
+        {
+            using(IDbConnection conn = connection)
+            {
+                var Sql = @"INSERT INTO Book(Title, Author, Genre, Price, PublishDate)
+                          VALUES (@Title, @Author, @Genre, @Price, @PublishDate) ";
+                await conn.ExecuteAsync(Sql, book);
+            }
+        }
     }
 }

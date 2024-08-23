@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using WebApplication8.DAL;
+using WebApplication8.Models;
 
 namespace WebApplication8.Controllers
 {
@@ -22,6 +23,21 @@ namespace WebApplication8.Controllers
             var books = await BookDAL.GetAll();
           
             return View(books);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(Book book)
+        {
+            if (ModelState.IsValid)
+            {
+                await BookDAL.CreateAsync(book);
+                return RedirectToAction("Index");
+            }
+            return View(book);
         }
     }
 }
