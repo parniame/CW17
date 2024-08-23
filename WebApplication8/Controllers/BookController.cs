@@ -1,19 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
+using WebApplication8.DAL;
 
 namespace WebApplication8.Controllers
 {
+
     public class BookController : Controller
     {
-        public IDbConnection connection;
+        public BookDALADO BookDALADO { get; set; }
+        public BookDAL BookDAL {  get; set; }
         public BookController(IConfiguration configuration)
         {
-            connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
+              //BookDALADO = new BookDALADO(configuration);
+              BookDAL = new BookDAL(configuration);
         }
-        public IActionResult Index()
+        
+
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var books = await BookDAL.GetAll();
+          
+            return View(books);
         }
     }
 }
